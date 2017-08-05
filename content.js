@@ -3,7 +3,7 @@ console.log("loading vr-webextension");
 
 
 function handleResponse(message) {
-  console.log(`Message from the background script:  ${message.response}`, message);
+  //console.log(`Message from the background script:  ${message.response}`, message);
   window.lastMessage = message;
 }
 
@@ -15,7 +15,7 @@ function captureScreen() {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
 
-    console.log(`captureScreen(${width}px x ${height}px)`);
+    //console.log(`captureScreen(${width}px x ${height}px)`);
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");

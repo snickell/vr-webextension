@@ -6,21 +6,32 @@
     <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.js"></script>
     <style>
-      canvas {
+      canvas.tab {
         width: 250px;
+      }
+      #preview {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        background-color: rgb(64,64,64);
+        z-index: 10;
+        color: #19b5eb;
+      }
+      #previewCanvases {
+        display: none;
       }
     </style>
   </head>
   <body>
-    <h1>VR Tab</h1>
     <script src="tab.js"></script>
-    <canvas id="previewCanvas"/>    
+
+    <div id="preview">
+      <b>Preview Canvases</b>
+      <div id="previewCanvases"></div>
+    </div>
     <a-scene>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-      <a-sky color="#ECECEC"></a-sky>
+      <a-curvedimage id="screen" radius="20" height="140" src="./MarsPanorama.jpg" ></a-curvedimage>
+      <a-sky color="#330000"></a-sky>
     </a-scene>
   </body>
 </html>
