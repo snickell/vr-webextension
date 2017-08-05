@@ -5,6 +5,8 @@ const ctx = canvas.getContext("2d");
 function handleMessage(request, sender, sendResponse) {
     // console.log("tabs.handleMessage()", request)
 
+    console.log("received screenCapture()");
+
     const imageData = new ImageData(request.data, request.width, request.height);
 
     canvas.width = request.width;

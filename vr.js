@@ -1,19 +1,20 @@
 
-console.log("vr.js", browser);
+console.log("loading vr-webextension");
 
 
 function handleResponse(message) {
-  console.log(`Message from the background script:  ${message}`);
+  //console.log(`Message from the background script:  ${message}`);
 }
 
 function handleError(error) {
-  console.log(`Error: ${error}`);
+  //console.log(`Error: ${error}`);
 }
 
 function captureScreen() {
-    console.log("captureScreen()");
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
+
+    console.log(`captureScreen(${width}px x ${height}px)`);
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -29,17 +30,14 @@ function captureScreen() {
     
     const imageData = ctx.getImageData(0, 0, width, height);
     
-    console.log("Sending", imageData);
     browser.runtime.sendMessage({
         data: imageData.data,
         width: imageData.width,
         height: imageData.height,
-        message: "hello"
     }).then(handleResponse, handleError);
-    console.log("Sent");
 }
 
 setInterval(function () {
     captureScreen();
-},5000);
+},1000);
 
