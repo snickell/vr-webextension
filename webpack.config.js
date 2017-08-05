@@ -7,7 +7,7 @@ module.exports = {
         content: "./content.js"
     },
     output: {
-        path: path.resolve(__dirname, "addon"),
+        path: path.resolve(__dirname, "build"),
         filename: "[name]/index.js"
     }
 };
