@@ -1,0 +1,36 @@
+{
+
+  "description": "Adds VR browsing to firefox",
+  "manifest_version": 2,
+  "name": "VR",
+  "version": "1.0",
+  "homepage_url": "http://mtnspring.org/vr",
+  "icons": {
+    "48": "icons/vr-48.png"
+  },
+  
+  "browser_action": {
+    "browser_style": true,
+    "default_title": "VR",
+    "default_popup": "tab.html",
+    "default_icon": {
+      "48": "icons/vr-48.png"
+    }
+  },  
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.mtnspring.org/*"],
+      "js": ["vr.js"],
+      "run_at": "document_end"      
+    }
+  ],
+  "permissions": [
+    "<all_urls>",
+    "windows", "tabs"
+  ]
+}
