@@ -12,7 +12,7 @@
   "browser_action": {
     "browser_style": true,
     "default_title": "VR",
-    "default_popup": "tab.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "48": "icons/vr-48.png"
     }
@@ -31,6 +31,6 @@
   ],
   "permissions": [
     "<all_urls>",
-    "windows", "tabs"
+    "tabs"
   ]
 }
