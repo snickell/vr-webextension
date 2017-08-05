@@ -8,24 +8,22 @@
   "icons": {
     "48": "icons/vr-48.png"
   },
-  
   "browser_action": {
     "browser_style": true,
     "default_title": "VR",
-    "default_popup": "popup.html",
+    "default_popup": "background.html",
     "default_icon": {
       "48": "icons/vr-48.png"
     }
-  },  
-
-  "background": {
-    "scripts": ["background.js"]
   },
-
+  "background": {
+    "page": "background.html"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://aframe.io https://cdnjs.cloudflare.com; object-src 'self';",
   "content_scripts": [
     {
       "matches": ["*://*.mtnspring.org/*"],
-      "js": ["vr.js"],
+      "js": ["content.js"],
       "run_at": "document_end"      
     }
   ],

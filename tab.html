@@ -2,15 +2,19 @@
 <html>
   <head>
     <title>VR Tab</title>
-    <meta name="description" content="Hello, WebVR! - A-Frame">
+    <meta charset="utf-8" />     
     <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.js"></script>
+    <style>
+      canvas {
+        width: 250px;
+      }
+    </style>
   </head>
   <body>
-    <h1>VR Popup</h1>
-    <script src="popup.js"></script>
-    
-    <canvas id="preview" style="width: 512px" />
-    
+    <h1>VR Tab</h1>
+    <script src="tab.js"></script>
+    <canvas id="previewCanvas"/>    
     <a-scene>
       <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>

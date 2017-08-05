@@ -3,7 +3,8 @@ console.log("loading vr-webextension");
 
 
 function handleResponse(message) {
-  //console.log(`Message from the background script:  ${message}`);
+  console.log(`Message from the background script:  ${message.response}`, message);
+  window.lastMessage = message;
 }
 
 function handleError(error) {
