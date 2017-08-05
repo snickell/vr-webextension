@@ -1,6 +1,4 @@
-
-
-console.log("Loading vr-bg.js");
+console.log("Loading background.js");
 
 
 let tab = null;
