@@ -1,24 +1,7 @@
 console.log("Creating tab");
 
-var senderIDToCanvas = new Map();
-	function generateTexture() {
-				var canvas = document.createElement( 'canvas' );
-				canvas.width = 256;
-				canvas.height = 256;
-				var context = canvas.getContext( '2d' );
-				var image = context.getImageData( 0, 0, 256, 256 );
-				var x = 0, y = 0;
-				for ( var i = 0, j = 0, l = image.data.length; i < l; i += 4, j ++ ) {
-					x = j % 256;
-					y = x == 0 ? y + 1 : y;
-					image.data[ i ] = 255;
-					image.data[ i + 1 ] = 255;
-					image.data[ i + 2 ] = 255;
-					image.data[ i + 3 ] = Math.floor( x ^ y );
-				}
-				context.putImageData( image, 0, 0 );
-				return canvas;
-			}
+const senderIDToCanvas = new Map();
+
 document.addEventListener("DOMContentLoaded", function(event) {
     const canvasHeader = document.getElementById('preview');
 
@@ -60,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         texture.wrapS = THREE.RepeatWrapping;
         texture.repeat.x = - 1;        
         
-        scr.material.map = texture;
+        //screen.material.map = texture;
 
         
         sendResponse({ response: "from tab", sender: sender});

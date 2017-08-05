@@ -1,4 +1,3 @@
-
 console.log("loading vr-webextension");
 
 
