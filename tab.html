@@ -1,9 +1,15 @@
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>VR Tab</title>
     <meta charset="utf-8" />     
-    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <script src="lib/aframe-master.js"></script>
+    <script src="components/aabb-collider.js"></script>
+    <script src="components/grab.js"></script>
+<script src="shaders/skyGradient.js"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.js"></script>
     <style>
       canvas.tab {
@@ -29,9 +35,26 @@
       <b>Preview Canvases</b>
       <div id="previewCanvases"></div>
     </div>
-    <a-scene>
-      <a-curvedimage id="screen" radius="20" height="140" src="./MarsPanorama.jpg" ></a-curvedimage>
-      <a-sky color="#330000"></a-sky>
-    </a-scene>
+<a-scene fog="color: #bc483e; near: 0; far: 65;">
+
+      <!-- Hands -->
+      <a-entity hand-controls="left" aabb-collider="objects: .cube;" grab></a-entity>
+      <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
+
+      <a-entity position="0 0 0">
+        <a-image position="0 1 -0.05" rotation="0 0 0" width="2" height="3" id="screef" src="./sample.jpg" ></a-image>
+      <a-entity>        
+
+      <!-- A-Frame cubes -->
+      <a-entity position="0 0 -0.5">
+        <!-- Environment -->
+        <a-entity id="sky"
+                  geometry="primitive: sphere; radius: 65;"
+                  material=" colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
+         <a-entity light="type: point; color: #f4f4f4; intensity: 0.2; distance: 0" position="8 10 18"></a-entity>
+         <a-entity light="type: point; color: #f4f4f4; intensity: 0.6; distance: 0" position="-8 10 -18"></a-entity>
+         <a-entity light="type: ambient; color: #f4f4f4; intensity: 0.4;" position="-8 10 -18"></a-entity>
+      </a-entity>
+</a-scene>
   </body>
 </html>

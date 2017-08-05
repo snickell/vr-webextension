@@ -1,0 +1,16 @@
+{
+  "name": "vr-webextension",
+  "version": "0.0.1",
+  "description": "Browse the 2D web from Firefox without leaving VR",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "webpack": "^2.3.2"
+  },
+  "dependencies": {
+    "k-frame": "^0.3.2-beta2"
+  }
+}
