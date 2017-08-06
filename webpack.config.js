@@ -4,16 +4,24 @@ module.exports = {
     entry: {
         background: "./src/background.js",
         tab: "./src/tab.js",
+        reacttab: "./src/reacttab.jsx",        
         content: "./src/content.js",
     },
     output: {
         path: path.resolve(__dirname, "addon/build"),
         filename: "[name]/index.js"
     },
+    devtool: "source-map",
     module: {
       loaders: [
-        { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-        { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+        {
+          test: /.jsx?$/,
+          loader: 'babel-loader',
+          exclude: /node_modules/,
+          query: {
+            presets: ['es2015', 'react']
+          }
+        }
       ]
-    }    
+    }, 
 };

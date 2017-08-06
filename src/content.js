@@ -1,6 +1,6 @@
 import simulant from 'simulant';
 
-console.log("loading vr-webextension");
+console.log("loading vr-webextension content");
 
 function handleResponse(message) {
   //console.log(`Message from the background script:  ${message.response}`, message);
