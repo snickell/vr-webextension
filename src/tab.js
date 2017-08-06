@@ -13,15 +13,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         canvasContainer.style.display = 'none';
     });
 
-    //const threeScreen = document.getElementById('screen').object3D.children[0];
     const screens = document.getElementById('screens');
 
-
-
-    // <a-image id="screen" position="0 1 -2" rotation="0 0 0" width="2" height="3" src="./sample.jpg" ></a-image>
-
     function addNewScreen(srcCanvas) {
-        console.log("addNewScreen()");
         const numScreens = senderIDToCanvas.size;
     
         var newScreen = document.createElement('a-image');
@@ -94,10 +88,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         
         sendResponse({ response: "from tab", sender: sender});
-    }
-    
-    console.log("lunk");
-    
+    }    
 
     browser.runtime.onMessage.addListener(handleMessage);
 });
