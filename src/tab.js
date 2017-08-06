@@ -13,8 +13,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         canvasContainer.style.display = 'none';
     });
 
-    const screen = document.getElementById('screen').object3D.children[0];
-    window.scr = screen;
+    const threeScreen = document.getElementById('screen').object3D.children[0];
 
     function handleMessage(request, sender, sendResponse) {
         const id = sender.tab.id;
@@ -43,7 +42,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         texture.wrapS = THREE.RepeatWrapping;
         texture.repeat.x = - 1;        
         
-        screen.material.map = texture;
+        console.log("ping");
+        threeScreen.material.map = texture;
 
         
         sendResponse({ response: "from tab", sender: sender});
