@@ -57,17 +57,3 @@ browser.runtime.onMessage.addListener( ({x, y, event }) => {
     const el = document.elementFromPoint(x, y);
     simulant.fire(el, event, {});    
 });
-
-/*
-    x -= pageXOffset;
-    y -= pageYOffset;
-    
-    // Uhoh, clicking off-screen, ugh should we do here?
-    if (x < 0 || y < 0) {
-        console.warn("Warning: clicking off-screen at: ", x, ", ", "y");
-    }
-    
-    const el = document.elementFromPoint(x, y);
-    simulant.fire(el, request.event, {});   
-
-*/
