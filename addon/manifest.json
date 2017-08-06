@@ -23,7 +23,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.mtnspring.org/*"],
-      "js": ["content.js"],
+      "js": ["build/content/index.js"],
       "run_at": "document_end"      
     }
   ],
