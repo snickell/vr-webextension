@@ -4,7 +4,7 @@ const senderIDToCanvas = new Map();
 
 document.addEventListener("DOMContentLoaded", function(event) {
     const canvasHeader = document.getElementById('preview');
-
+        console.log("ping");
     const canvasContainer = document.getElementById('previewCanvases');
     canvasHeader.addEventListener('mouseenter', function () {
         canvasContainer.style.display = 'block';
@@ -39,10 +39,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         texture.needsUpdate = true;
         
         // flip the texture
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.repeat.x = - 1;        
+        //texture.wrapS = THREE.RepeatWrapping;
+        //texture.repeat.x = - 1;        
         
-        console.log("ping");
         threeScreen.material.map = texture;
 
         

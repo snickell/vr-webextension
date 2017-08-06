@@ -19,10 +19,10 @@
   "background": {
     "page": "background.html"
   },
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://aframe.io https://cdnjs.cloudflare.com; object-src 'self';",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
   "content_scripts": [
     {
-      "matches": ["*://*.mtnspring.org/*"],
+      "matches": ["<all_urls>"],
       "js": ["build/content/index.js"],
       "run_at": "document_end"      
     }
