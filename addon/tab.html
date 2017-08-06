@@ -33,9 +33,18 @@
     </div>
 <a-scene fog="color: #bc483e; near: 0; far: 65;">
 
+      <a-camera>
+        <a-cursor screen-check raycaster="objects: .screen; showLine: true"></a-cursor>
+        
+      </a-camera>
+
       <!-- Hands -->
-      <a-entity hand-controls="left" aabb-collider="objects: .cube;" grab></a-entity>
-      <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
+      <!--
+      <a-entity screen-laser-check>
+        <a-entity laser-controls raycaster="objects: .screen; showLine: true"></a-entity>
+        <a-entity laser-controls="hand: right" hand-controls="right" raycaster="objects: .screen"></a-entity>
+      <a-entity>
+      -->
 
       <a-entity id="screens" position="0 0 0">
 

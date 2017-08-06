@@ -3,6 +3,15 @@ console.log("Creating tab");
 const senderIDToCanvas = new Map();
 const canvasToScreen = new Map();
 
+AFRAME.registerComponent('screen-check', {
+  dependencies: ['raycaster'],
+  init: function () {
+    this.el.addEventListener('raycaster-intersected', function () {
+      console.log('Player hit screen!', arguments);
+    });
+  }
+});
+
 document.addEventListener("DOMContentLoaded", function(event) {
     const canvasHeader = document.getElementById('preview');
     const canvasContainer = document.getElementById('previewCanvases');
@@ -85,7 +94,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
         const threeScreen = canvasToScreen.get(canvas).object3D.children[0];
         threeScreen.material.map = texture;
-
+        
+        // this is required if we want to use non-power-of-two textures
+        threeScreen.material.map.minFilter = THREE.LinearFilter;
         
         sendResponse({ response: "from tab", sender: sender});
     }    
