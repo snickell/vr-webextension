@@ -42,13 +42,23 @@ setInterval(function () {
     captureScreen();
 },500);
 
-browser.runtime.onMessage.addListener(request => {
-    const el = document.elementFromPoint(request.x, request.y);
-    simulant.fire(el, request.event, {});    
+browser.runtime.onMessage.addListener( ({x, y, event }) => {
+    x -= pageXOffset;
+    y -= pageYOffset;
+    
+    
+    if (x < 0 || y < 0) {
+        console.warn("No mouse events, its outside the window");
+        return;
+    } else {
+        console.log(x, y);
+    }
+    
+    const el = document.elementFromPoint(x, y);
+    simulant.fire(el, event, {});    
 });
 
 /*
-    { x, y } = request;
     x -= pageXOffset;
     y -= pageYOffset;
     
