@@ -6,7 +6,6 @@
 <head>
   <title>VR Tab</title>
   <meta charset="utf-8" />
-  <script src="lib/aframe-master.js"></script>
   <style>
     canvas.tab {
       width: 250px;
@@ -25,10 +24,10 @@
       display: none;
     }
   </style>
+  <script src="build/tab/index.js"></script>  
 </head>
 
 <body>
-  <script src="build/tab/index.js"></script>
 
   <div id="preview">
     <b>Preview Canvases</b>
@@ -45,6 +44,8 @@
       <a-entity laser-controls="hand: left" raycaster="objects: .screen; showLine: true"></a-entity>
       <a-entity laser-controls="hand: right" raycaster="objects: .screen; showLine: true"></a-entity>
     </a-entity>
+    
+    <!--<a-entity id="keyboard" position="0 1.25 1" scale="1 1 1" keyboard/>-->
 
     <a-entity id="screens" position="0 0 0"></a-entity>
 

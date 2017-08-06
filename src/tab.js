@@ -1,3 +1,6 @@
+import AFRAME from 'aframe';
+import keyboard from 'aframe-keyboard';
+
 console.log("Creating tab");
 
 const senderIDToCanvas = new Map();
