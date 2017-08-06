@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         texture.wrapS = THREE.RepeatWrapping;
         texture.repeat.x = - 1;        
         
-        //screen.material.map = texture;
+        screen.material.map = texture;
 
         
         sendResponse({ response: "from tab", sender: sender});
