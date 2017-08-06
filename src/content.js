@@ -39,5 +39,5 @@ function captureScreen() {
 
 setInterval(function () {
     captureScreen();
-},1000);
+},500);
 
