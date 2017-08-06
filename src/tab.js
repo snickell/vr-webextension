@@ -22,6 +22,20 @@ AFRAME.registerComponent('send-mouse-events', {
             
             browser.tabs.sendMessage(senderID, { event: "mouseover", x, y }).catch(onError);
         });
+        
+        this.el.addEventListener('click', function (evt) {
+            console.log("CLICK!");
+            let {x, y} = evt.detail.intersection.uv;
+            
+            const senderID = screenToSenderID.get(evt.detail.target);
+            const canvas = screenToCanvas.get(evt.detail.target);
+            
+            x *= canvas.width;
+            y = canvas.height * (1.0 - y);
+            
+            browser.tabs.sendMessage(senderID, { event: "click", x, y }).catch(onError);
+        });
+        
     }
 });
 
@@ -45,7 +59,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
         screenToSenderID.set(newScreen, id);
         screenToCanvas.set(newScreen, newCanvas);
-        
+        senderIDToScreen.set(id, newScreen);
+                
         newScreen.className = "screen";
         newScreen.setAttribute("position", "0 1 -2");
         newScreen.setAttribute("width", "2");
@@ -54,8 +69,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         newScreen.setAttribute("send-mouse-events", "");
         
         screens.appendChild(newScreen);
-                
-        senderIDToScreen.set(id, newScreen);
         
         positionScreens();    
     }
