@@ -1,5 +1,6 @@
-console.log("loading vr-webextension");
+import simulant from 'simulant';
 
+console.log("loading vr-webextension");
 
 function handleResponse(message) {
   //console.log(`Message from the background script:  ${message.response}`, message);
@@ -41,3 +42,7 @@ setInterval(function () {
     captureScreen();
 },500);
 
+browser.runtime.onMessage.addListener(request => {
+    const el = document.elementFromPoint(request.x, request.y);
+    simulant.fire(el, 'mouseover', {});    
+});

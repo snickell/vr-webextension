@@ -1,15 +1,28 @@
 console.log("Creating tab");
 
 const senderIDToCanvas = new Map();
-const canvasToScreen = new Map();
+const senderIDToScreen = new Map();
+const screenToSenderID = new Map();
+const screenToCanvas = new Map();
 
-AFRAME.registerComponent('screen-check', {
-  dependencies: ['raycaster'],
-  init: function () {
-    this.el.addEventListener('raycaster-intersected', function () {
-      console.log('Player hit screen!', arguments);
-    });
-  }
+function onError(error) {
+  console.error(`Error: ${error}`);
+}
+
+AFRAME.registerComponent('send-mouse-events', {
+    init: function () {
+        this.el.addEventListener('raycaster-intersected', function (evt) {
+            let {x, y} = evt.detail.intersection.uv;
+            
+            const senderID = screenToSenderID.get(evt.detail.target);
+            const canvas = screenToCanvas.get(evt.detail.target);
+            
+            x *= canvas.width;
+            y = canvas.height * (1.0 - y);
+            
+            browser.tabs.sendMessage(senderID, { event: "mouseover", x, y }).catch(onError);
+        });
+    }
 });
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -24,25 +37,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     const screens = document.getElementById('screens');
 
-    function addNewScreen(srcCanvas) {
+    function addNewScreen(id, newCanvas) {
+        
         const numScreens = senderIDToCanvas.size;
     
         var newScreen = document.createElement('a-image');
+        
+        screenToSenderID.set(newScreen, id);
+        screenToCanvas.set(newScreen, newCanvas);
+        
         newScreen.className = "screen";
         newScreen.setAttribute("position", "0 1 -2");
         newScreen.setAttribute("width", "2");
         newScreen.setAttribute("height", "3");
         newScreen.setAttribute("src", "./sample.jpg");
-
+        newScreen.setAttribute("send-mouse-events", "");
+        
         screens.appendChild(newScreen);
                 
-        canvasToScreen.set(srcCanvas, newScreen);
-
+        senderIDToScreen.set(id, newScreen);
+        
         positionScreens();    
     }
     
     function positionScreens() {
-        const screens = Array.from(canvasToScreen.values());
+        const screens = Array.from(senderIDToScreen.values());
         
         // for now, position them equally spaced on a circle
         const theta = ((Math.PI*2) / screens.length);        
@@ -65,40 +84,44 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
     function handleMessage(request, sender, sendResponse) {
-        const id = sender.tab.id;
+        try {
+            const id = sender.tab.id;
 
-        if (!senderIDToCanvas.has(id)) {
-            const newCanvas = document.createElement('canvas');
-            newCanvas.classList.add('tab');
-            canvasContainer.appendChild(newCanvas);
-            senderIDToCanvas.set(id, newCanvas);
-            addNewScreen(newCanvas);
+            if (!senderIDToCanvas.has(id)) {
+                const newCanvas = document.createElement('canvas');
+                newCanvas.classList.add('tab');
+                canvasContainer.appendChild(newCanvas);
+                senderIDToCanvas.set(id, newCanvas);
+                addNewScreen(id, newCanvas);
+            }
+        
+            const canvas = senderIDToCanvas.get(id);
+            const ctx = canvas.getContext("2d");
+
+            const imageData = new ImageData(request.data, request.width, request.height);
+
+            canvas.width = request.width;
+            canvas.height = request.height;
+
+            ctx.putImageData(imageData, 0, 0);
+
+            var texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+        
+            // flip the texture
+            //texture.wrapS = THREE.RepeatWrapping;
+            //texture.repeat.x = - 1;        
+        
+            const threeScreen = senderIDToScreen.get(id).object3D.children[0];
+            threeScreen.material.map = texture;
+        
+            // this is required if we want to use non-power-of-two textures
+            threeScreen.material.map.minFilter = THREE.LinearFilter;
+        
+            sendResponse({ response: "from tab", sender: sender});            
+        } catch (ex) {
+            console.error("Exception: ", ex);
         }
-        
-        const canvas = senderIDToCanvas.get(id);
-        const ctx = canvas.getContext("2d");
-
-        const imageData = new ImageData(request.data, request.width, request.height);
-
-        canvas.width = request.width;
-        canvas.height = request.height;
-
-        ctx.putImageData(imageData, 0, 0);
-
-        var texture = new THREE.Texture(canvas);
-        texture.needsUpdate = true;
-        
-        // flip the texture
-        //texture.wrapS = THREE.RepeatWrapping;
-        //texture.repeat.x = - 1;        
-        
-        const threeScreen = canvasToScreen.get(canvas).object3D.children[0];
-        threeScreen.material.map = texture;
-        
-        // this is required if we want to use non-power-of-two textures
-        threeScreen.material.map.minFilter = THREE.LinearFilter;
-        
-        sendResponse({ response: "from tab", sender: sender});
     }    
 
     browser.runtime.onMessage.addListener(handleMessage);

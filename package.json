@@ -11,6 +11,7 @@
     "webpack": "^2.3.2"
   },
   "dependencies": {
-    "k-frame": "^0.3.2-beta2"
+    "k-frame": "^0.3.2-beta2",
+    "simulant": "^0.2.2"
   }
 }
