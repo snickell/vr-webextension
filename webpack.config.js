@@ -1,5 +1,11 @@
 var WebpackNotifierPlugin = require('webpack-notifier');
+var webpack = require('webpack');
+
 const path = require("path");
+// get git info from command line
+let commitHash = require('child_process')
+  .execSync('git rev-parse --short HEAD')
+  .toString();
 
 module.exports = {
     entry: {
@@ -29,6 +35,9 @@ module.exports = {
       new WebpackNotifierPlugin({
         contentImage: path.join(__dirname, 'addon/icons/vr-48.png'),
         alwaysNotify: true
-      }),   
+      }),
+      new webpack.DefinePlugin({
+        __GIT_REVISION__: JSON.stringify(commitHash),
+      })      
     ],    
 };
