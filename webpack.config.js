@@ -1,4 +1,4 @@
-var WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+var WebpackNotifierPlugin = require('webpack-notifier');
 const path = require("path");
 
 module.exports = {
@@ -26,10 +26,9 @@ module.exports = {
       ]
     },
     plugins: [
-      new WebpackBuildNotifierPlugin({
-        title: "Build complete: vr-webextension",
-        logo: path.resolve("./addon/icons/vr-48.png"),
-        suppressSuccess: true
-      })
+      new WebpackNotifierPlugin({
+        contentImage: path.join(__dirname, 'addon/icons/vr-48.png'),
+        alwaysNotify: true
+      }),   
     ],    
 };
