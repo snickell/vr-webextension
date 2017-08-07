@@ -3,7 +3,7 @@ import {Entity, Scene, Camera, Cursor, Sky} from 'aframe-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import registerTabTextureListener from 'listen-for-tab-textures';
+import registerTabTextureListener from './listen-for-tab-textures';
 
 /* orphan code, need to use
 
