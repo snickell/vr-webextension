@@ -31,12 +31,14 @@ function captureScreen() {
     
     const imageData = ctx.getImageData(0, 0, width, height);
     
-    browser.runtime.sendMessage({
+    port.postMessage({
         data: imageData.data,
         width: imageData.width,
         height: imageData.height,
     }).then(handleResponse, handleError);
 }
+
+var port = browser.runtime.connect();
 
 setInterval(function () {
     captureScreen();

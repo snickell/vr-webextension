@@ -1,37 +1,55 @@
 import {Entity, Scene} from 'aframe-react';
 import React from 'react';
 
+import aframe from 'aframe';
+
 export default class TabScreens extends React.Component {
   constructor() {
     super();
 
     this.state = { senderIDs: [] };
 
-    this.senderIDs = new Set();
     this.senderIDToCanvas = new Map();
     this.senderIDToScreen = new Map();
     this.screenToSenderID = new Map();
 
+    const onRaycasterIntersectedScreen = evt => this.relayRaycastMessage("click", evt);
+    const onClickScreen = evt => this.relayRaycastMessage("mouseover", evt);
+    aframe.registerComponent('send-mouse-events', {
+        init: function () {
+            this.el.addEventListener('raycaster-intersected', onRaycasterIntersectedScreen);
+            this.el.addEventListener('click', onClickScreen);
+        }
+    });
+
     // receive new frame events from other tabs
-    browser.runtime.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
+    //browser.runtime.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
+    browser.runtime.onConnect.addListener(p => {
+      p.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
+      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });      
+    });
   }
 
-  onNewFrameFromOtherTab(request, sender, sendResponse) {
-    const senderID = sender.tab.id;
+  relayRaycastMessage(eventName, raycastEvt) {
+    console.log("raycaster event: ", eventName);
 
-    // If we haven't seen this senderID, add it to state.senderIDs
-    if (!this.senderIDs.has(senderID)) {
-      this.senderIDs.add(senderID);
+    let {x, y} = evt.detail.intersection.uv;
+    
+    const senderID = screenToSenderID.get(evt.detail.target);
+    const canvas = screenToCanvas.get(evt.detail.target);
+    
+    x *= canvas.width;
+    y = canvas.height * (1.0 - y);
 
-      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });
+    browser.tabs.sendMessage(senderID, { event: "mouseover", x, y }).catch(onError);
+  }
 
-      // FIXME: for now we drop the frame if this is a new tab, becuase we can't
-      // wait for react to update the DOM and create our new canvas
-      // long-term we should cache the first frame, and then draw it as soon as react updates      
-      return;
-    }
+  onNewFrameFromOtherTab(request, port) {
+    const senderID = port.sender.tab.id;
 
     const canvas = this.senderIDToCanvas.get(senderID);
+
+    if (!canvas) return; // react must not have updated the DOM yet
 
     const ctx = canvas.getContext("2d");
 
@@ -56,16 +74,13 @@ export default class TabScreens extends React.Component {
 
     // this is required if we want to use non-power-of-two textures
     threeScreen.material.map.minFilter = THREE.LinearFilter;
-
-    sendResponse({ response: "from tab", sender: sender });
-
   }
 
   renderTabScreen(senderID, x, y, z, rotationY) {
     console.log("renderTabScreen(", senderID, x, y, z, rotationY, ")");
     return (
       <a-image
-        class="tab-screen"
+        class="tab-screen" key={senderID}
         send-mouse-events=""       
         position={`${x} ${y} ${z}`}
         rotation={`0 ${rotationY} 0`}
@@ -76,7 +91,7 @@ export default class TabScreens extends React.Component {
           this.screenToSenderID.set(tabScreen, senderID);
         }}
       >
-        <canvas class="offscreen-buffer" ref={canvas => this.senderIDToCanvas.set(senderID, canvas)} />
+        <canvas className="offscreen-buffer" ref={canvas => this.senderIDToCanvas.set(senderID, canvas)} />
       </a-image>
     );
   }
