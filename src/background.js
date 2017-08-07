@@ -1,7 +1,7 @@
 // Open our VR Preview Tab
 let tab=null;
 browser.tabs.create({
-    url: "reacttabs.html"
+    url: "vr-browser.html"
 }).then(function (newTab) {
     tab = newTab;
 });

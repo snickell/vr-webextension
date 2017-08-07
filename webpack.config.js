@@ -10,8 +10,7 @@ let commitHash = require('child_process')
 module.exports = {
     entry: {
         background: "./src/background.js",
-        tab: "./src/tab.js",
-        reacttabs: "./src/reacttabs/index.js",        
+        "vr-browser": "./src/vr-browser/index.js",        
         content: "./src/content.js",
     },
     output: {
