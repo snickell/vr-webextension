@@ -4,7 +4,7 @@ import React from 'react';
 export default class TabScreens extends React.Component {
   constructor() {
     super();
-    
+
     this.state = { senderIDs: [] };
 
     this.senderIDToCanvas = new Map();
@@ -13,10 +13,6 @@ export default class TabScreens extends React.Component {
 
     // receive new frame events from other tabs
     browser.runtime.onMessage.addListener(this.onNewFrameFromOtherTab);
-  }
-
-  getCanvasFor(senderID) {
-
   }
 
   onNewFrameFromOtherTab(request, sender, sendResponse) {
