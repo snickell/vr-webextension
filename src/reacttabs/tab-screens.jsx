@@ -7,8 +7,9 @@ export default class TabScreens extends React.Component {
 
     this.state = { senderIDs: [] };
 
+    this.senderIDs = new Set();
     this.senderIDToCanvas = new Map();
-    this.senderIDToScreenRef = new Map();
+    this.senderIDToScreen = new Map();
     this.screenToSenderID = new Map();
 
     // receive new frame events from other tabs
@@ -18,11 +19,15 @@ export default class TabScreens extends React.Component {
   onNewFrameFromOtherTab(request, sender, sendResponse) {
     const senderID = sender.tab.id;
 
-    if (!this.senderIDToCanvas.has(senderID)) {
+    // If we haven't seen this senderID, add it to state.senderIDs
+    if (!this.senderIDs.has(senderID)) {
+      this.senderIDs.add(senderID);
+
+      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });
+
       // FIXME: for now we drop the frame if this is a new tab, becuase we can't
       // wait for react to update the DOM and create our new canvas
-      // long-term we should cache the first frame, and then draw it as soon as react updates
-      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });
+      // long-term we should cache the first frame, and then draw it as soon as react updates      
       return;
     }
 
@@ -44,13 +49,8 @@ export default class TabScreens extends React.Component {
     //texture.wrapS = THREE.RepeatWrapping;
     //texture.repeat.x = - 1;        
 
-    const screenEl = this.senderIDToScreenRef.get(senderID).el;
-    const threeScreen = screenEl.object3D.children[0];
+    const threeScreen = this.senderIDToScreen.get(senderID).object3D.children[0];
 
-    if (!screenEl || !screenEl.object3D || !screenEl.object3D.children || !screenEl.object3D.children[0]) {
-      console.warn("screenEl not fully created yet: ", screenEl);
-      return;
-    }
 
     threeScreen.material.map = texture;
 
@@ -62,21 +62,22 @@ export default class TabScreens extends React.Component {
   }
 
   renderTabScreen(senderID, x, y, z, rotationY) {
+    console.log("renderTabScreen(", senderID, x, y, z, rotationY, ")");
     return (
-      <Entity
+      <a-image
         class="tab-screen"
-        position={{ x, y, z }}
-        rotation={{ x: 0, y: rotationY, z: 0 }}
+        position={`${x} ${y} ${z}`}
+        rotation={`0 ${rotationY} 0`}
         width={2} height={3}
         src="./sample.jpg"
         send-mouse-events
         ref={tabScreen => {
-          this.senderIDToScreenRef.set(senderID, tabScreen);
+          this.senderIDToScreen.set(senderID, tabScreen);
           this.screenToSenderID.set(tabScreen, senderID);
         }}
       >
         <canvas class="offscreen-buffer" ref={canvas => this.senderIDToCanvas.set(senderID, canvas)} />
-      </Entity>
+      </a-image>
     );
   }
 
@@ -86,8 +87,7 @@ export default class TabScreens extends React.Component {
     var tabScreens = this.state.senderIDs.map((senderID, idx) => {
       const radius = 2;
       const angle = theta * idx;
-      
-      
+            
       const x = radius * Math.sin(angle);
       const y = 1;            
       const z = -radius * Math.cos(angle);
