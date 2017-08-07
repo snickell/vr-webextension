@@ -66,11 +66,11 @@ export default class TabScreens extends React.Component {
     return (
       <a-image
         class="tab-screen"
+        send-mouse-events=""       
         position={`${x} ${y} ${z}`}
         rotation={`0 ${rotationY} 0`}
         width={2} height={3}
         src="./sample.jpg"
-        send-mouse-events
         ref={tabScreen => {
           this.senderIDToScreen.set(senderID, tabScreen);
           this.screenToSenderID.set(tabScreen, senderID);
