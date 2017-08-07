@@ -3,6 +3,10 @@ import React from 'react';
 
 import aframe from 'aframe';
 
+function onError(error) {
+  console.error(`Error: ${error}`);
+}
+
 export default class TabScreens extends React.Component {
   constructor() {
     super();
@@ -12,9 +16,10 @@ export default class TabScreens extends React.Component {
     this.senderIDToCanvas = new Map();
     this.senderIDToScreen = new Map();
     this.screenToSenderID = new Map();
+    this.senderIDToPort = new Map();
 
-    const onRaycasterIntersectedScreen = evt => this.relayRaycastMessage("click", evt);
-    const onClickScreen = evt => this.relayRaycastMessage("mouseover", evt);
+    const onRaycasterIntersectedScreen = evt => this.relayRaycastMessage("mouseover", evt);
+    const onClickScreen = evt => this.relayRaycastMessage("click", evt);
     aframe.registerComponent('send-mouse-events', {
         init: function () {
             this.el.addEventListener('raycaster-intersected', onRaycasterIntersectedScreen);
@@ -25,25 +30,35 @@ export default class TabScreens extends React.Component {
     // receive new frame events from other tabs
     //browser.runtime.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
     browser.runtime.onConnect.addListener(port => {
-      port.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
-      
       const senderID = port.sender.tab.id;      
-      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });      
+      this.senderIDToPort.set(senderID, port);
+
+      port.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));      
+
+      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });   
+    });
+
+    browser.runtime.onConnect.addListener(port => {
+      const senderID = port.sender.tab.id;      
+      this.senderIDToPort.set(senderID, port);
+
+      port.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));      
+
+      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });   
     });
   }
 
   relayRaycastMessage(eventName, raycastEvt) {
-    console.log("raycaster event: ", eventName);
-
     let {x, y} = raycastEvt.detail.intersection.uv;
     
-    const senderID = screenToSenderID.get(raycastEvt.detail.target);
-    const canvas = screenToCanvas.get(raycastEvt.detail.target);
+    const senderID = this.screenToSenderID.get(raycastEvt.detail.target);
+    const canvas = this.senderIDToCanvas.get(senderID);
     
     x *= canvas.width;
     y = canvas.height * (1.0 - y);
 
-    browser.tabs.sendMessage(senderID, { event: "mouseover", x, y }).catch(onError);
+    const port = this.senderIDToPort.get(senderID);
+    port.postMessage({ event: eventName, x, y });
   }
 
   onNewFrameFromOtherTab(request, port) {

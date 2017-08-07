@@ -31,6 +31,8 @@ function captureScreen() {
     
     const imageData = ctx.getImageData(0, 0, width, height);
     
+    const boo = port;
+
     port.postMessage({
         data: imageData.data,
         width: imageData.width,
@@ -38,24 +40,44 @@ function captureScreen() {
     }).then(handleResponse, handleError);
 }
 
-var port = browser.runtime.connect();
+let port = null;
 
-setInterval(function () {
-    captureScreen();
-},500);
+function tryToConnect() {
+    // using setTimeout here is a hack
+    port = browser.runtime.connect({ name: "tab-frames"});
 
-browser.runtime.onMessage.addListener( ({x, y, event }) => {
-    x -= pageXOffset;
-    y -= pageYOffset;
-    
-    
-    if (x < 0 || y < 0) {
-        console.warn("No mouse events, its outside the window");
-        return;
+    if (port) {
+        port.onMessage.addListener( ({x, y, event }) => {
+            console.log(event);
+            if (event.name === "click") { console.log("click!"); }
+            x -= pageXOffset;
+            y -= pageYOffset;
+            
+            
+            if (x < 0 || y < 0) {
+                console.warn("No mouse events, its outside the window");
+                return;
+            }
+            
+            const el = document.elementFromPoint(x, y);
+
+            try {
+                if (el) simulant.fire(el, event, {});
+            } catch (e) {
+                console.error("Error using simulant to create event: ", e);
+            }
+            
+        });
+
+
+        setInterval(function () {
+            captureScreen();
+        },2000);
+
+        console.log("Connected!");
     } else {
-        console.log(x, y);
+        setTimeout(tryToConnect, 5000);
     }
-    
-    const el = document.elementFromPoint(x, y);
-    simulant.fire(el, event, {});    
-});
+}
+
+setTimeout(tryToConnect, 0);
