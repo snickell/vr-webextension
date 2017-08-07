@@ -73,9 +73,9 @@ export default class TabScreens extends React.Component {
       );
   }
 
-  renderTabScreens () {
+  render () {
     // for now, position them equally spaced on a circle
-    const theta = ((Math.PI*2) / this.state.screens.length);        
+    const theta = ((Math.PI*2) / this.state.senderIDs.length);        
     var tabs = this.state.senderIDs.map((senderID, idx) => {
       const radius = 2;
       const angle = theta * idx;
