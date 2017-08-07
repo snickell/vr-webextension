@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "yarn-install": "yarn install"
   },
   "license": "MPL-2.0",
   "devDependencies": {
