@@ -24,8 +24,10 @@ export default class TabScreens extends React.Component {
 
     // receive new frame events from other tabs
     //browser.runtime.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
-    browser.runtime.onConnect.addListener(p => {
-      p.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
+    browser.runtime.onConnect.addListener(port => {
+      port.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));
+      
+      const senderID = port.sender.tab.id;      
       this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });      
     });
   }
@@ -33,10 +35,10 @@ export default class TabScreens extends React.Component {
   relayRaycastMessage(eventName, raycastEvt) {
     console.log("raycaster event: ", eventName);
 
-    let {x, y} = evt.detail.intersection.uv;
+    let {x, y} = raycastEvt.detail.intersection.uv;
     
-    const senderID = screenToSenderID.get(evt.detail.target);
-    const canvas = screenToCanvas.get(evt.detail.target);
+    const senderID = screenToSenderID.get(raycastEvt.detail.target);
+    const canvas = screenToCanvas.get(raycastEvt.detail.target);
     
     x *= canvas.width;
     y = canvas.height * (1.0 - y);
