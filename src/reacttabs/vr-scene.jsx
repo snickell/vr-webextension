@@ -7,7 +7,7 @@ export default class VRScene extends React.Component {
   render () {
     return (
       <Scene>
-        
+        <div style={{position: "absolute", right: "0px", top: "0px", zIndex: 10, color: "white", padding: "3px"}}>GIT: {__GIT_REVISION__}</div>
         <a-camera>
           <a-cursor raycaster="objects: .screen; showLine: true"></a-cursor>
         </a-camera>
