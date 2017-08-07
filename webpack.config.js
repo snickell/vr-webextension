@@ -4,7 +4,7 @@ module.exports = {
     entry: {
         background: "./src/background.js",
         tab: "./src/tab.js",
-        reacttab: "./src/reacttab.jsx",        
+        reacttabs: "./src/reacttabs/index.js",        
         content: "./src/content.js",
     },
     output: {
