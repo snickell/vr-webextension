@@ -10,7 +10,7 @@ let commitHash = require('child_process')
 module.exports = {
     entry: {
         background: "./src/background.js",
-        "vr-browser": "./src/vr-browser/index.js",        
+        "vr-browser": "./src/vr-browser/index.jsx",        
         content: "./src/content.js",
     },
     output: {
@@ -25,12 +25,22 @@ module.exports = {
           loader: 'babel-loader',
           exclude: /node_modules/,
           query: {
-            presets: ['es2015', 'react']
+            presets: ['env', 'react'],
+            plugins: [require('babel-plugin-transform-object-rest-spread')]            
           }
-        }
+        },
+        {
+          test: /.js?$/,
+          loader: 'babel-loader',     
+          exclude: /node_modules/,
+          query: {
+            presets: ['env'],
+            plugins: [require('babel-plugin-transform-object-rest-spread')]            
+          }
+        }        
       ]
     },
-    plugins: [
+    plugins: [     
       new WebpackNotifierPlugin({
         contentImage: path.join(__dirname, 'addon/icons/vr-48.png'),
         alwaysNotify: true

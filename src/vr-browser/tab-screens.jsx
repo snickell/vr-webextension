@@ -7,6 +7,11 @@ function onError(error) {
   console.error(`Error: ${error}`);
 }
 
+class Image extends React.Component {
+  render() { return <Entity { ...this.props } primitive="a-image" />; }
+};
+
+
 export default class TabScreens extends React.Component {
   constructor() {
     super();
@@ -96,20 +101,20 @@ export default class TabScreens extends React.Component {
   renderTabScreen(senderID, x, y, z, rotationY) {
     console.log("renderTabScreen(", senderID, x, y, z, rotationY, ")");
     return (
-      <a-image
+      <Image
         class="tab-screen" key={senderID}
         send-mouse-events=""       
         position={`${x} ${y} ${z}`}
         rotation={`0 ${rotationY} 0`}
         width={2} height={3}
         src="./sample.jpg"
-        ref={tabScreen => {
+        _ref={tabScreen => {
           this.senderIDToScreen.set(senderID, tabScreen);
           this.screenToSenderID.set(tabScreen, senderID);
         }}
       >
-        <canvas className="offscreen-buffer" ref={canvas => this.senderIDToCanvas.set(senderID, canvas)} />
-      </a-image>
+        <canvas className="offscreen-buffer" ref={canvas => this.senderIDToCanvas.set(senderID, canvas) } />
+      </Image>
     );
   }
 
