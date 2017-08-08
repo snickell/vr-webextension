@@ -19,6 +19,9 @@ export default class VRScene extends React.Component {
   render () {
     return (
       <Scene>
+        <a-assets>
+          <img id="floor" src="floor.jpg" crossOrigin="anonymous"/>
+        </a-assets>
         <div style={{position: "absolute", right: "0px", top: "0px", zIndex: 10, color: "white", padding: "3px"}}>GIT: {__GIT_REVISION__}</div>
         <Camera>
           <Cursor raycaster={{objects: ".tab-screen", showLine: true}}></Cursor>
@@ -32,6 +35,11 @@ export default class VRScene extends React.Component {
         <TabScreens/>
 
         <Sky color="#334921"/>
+        
+        <Entity id="ground"
+          geometry="primitive: box; width: 12; height: 0.01; depth: 12"
+          material="shader: flat; src: #floor">
+        </Entity>
       </Scene>
     );
   }

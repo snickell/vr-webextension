@@ -80,7 +80,10 @@ export default class TabScreens extends React.Component {
     //texture.wrapS = THREE.RepeatWrapping;
     //texture.repeat.x = - 1;        
 
-    const threeScreen = this.senderIDToScreen.get(senderID).object3D.children[0];
+    const screen = this.senderIDToScreen.get(senderID);
+    screen.setAttribute('width', canvas.width / 500);
+    screen.setAttribute('height', canvas.height / 500);
+    const threeScreen = screen.object3D.children[0];
 
 
     threeScreen.material.map = texture;
