@@ -20,7 +20,8 @@ export default class VRScene extends React.Component {
     return (
       <Scene>
         <a-assets>
-          <img id="floor" src="floor.jpg" crossOrigin="anonymous"/>
+          <img id="floor" src="assets/images/floor.jpg" crossOrigin="anonymous"/>
+          <img id="skymap" src="assets/images/sky.jpg" crossOrigin="anonymous"/> 
         </a-assets>
         <div style={{position: "absolute", right: "0px", top: "0px", zIndex: 10, color: "white", padding: "3px"}}>GIT: {__GIT_REVISION__}</div>
         <Camera>
@@ -34,12 +35,12 @@ export default class VRScene extends React.Component {
     
         <TabScreens/>
 
-        <Sky color="#334921"/>
         
         <Entity id="ground"
           geometry="primitive: box; width: 12; height: 0.01; depth: 12"
           material="shader: flat; src: #floor">
         </Entity>
+        <Entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048" />
       </Scene>
     );
   }
