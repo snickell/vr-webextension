@@ -104,7 +104,7 @@ export default class TabScreens extends React.Component {
       <Image
         class="tab-screen" key={senderID}
         send-mouse-events=""       
-        position={`${x} ${y} ${z}`}
+        position={{x, y, z}}
         rotation={`0 ${rotationY} 0`}
         width={2} height={3}
         src="./sample.jpg"
