@@ -42,15 +42,6 @@ export default class TabScreens extends React.Component {
 
       this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });   
     });
-
-    browser.runtime.onConnect.addListener(port => {
-      const senderID = port.sender.tab.id;      
-      this.senderIDToPort.set(senderID, port);
-
-      port.onMessage.addListener(this.onNewFrameFromOtherTab.bind(this));      
-
-      this.setState({ senderIDs: this.state.senderIDs.concat([senderID]) });   
-    });
   }
 
   relayRaycastMessage(eventName, raycastEvt) {
@@ -99,13 +90,12 @@ export default class TabScreens extends React.Component {
   }
 
   renderTabScreen(senderID, x, y, z, rotationY) {
-    console.log("renderTabScreen(", senderID, x, y, z, rotationY, ")");
     return (
       <Image
         class="tab-screen" key={senderID}
-        send-mouse-events=""       
+        send-mouse-events       
         position={{x, y, z}}
-        rotation={`0 ${rotationY} 0`}
+        rotation={{ x: 0, y: rotationY, z: 0}}
         width={2} height={3}
         src="./sample.jpg"
         _ref={tabScreen => {
@@ -130,7 +120,7 @@ export default class TabScreens extends React.Component {
       const z = -radius * Math.cos(angle);
       
       const rotationY = 360.0 - (theta * idx * (180.0 / Math.PI));
-
+      console.log("senderID: ", senderID, idx, this.state.senderIDs.length);
       return this.renderTabScreen(senderID, x, y, z, rotationY);
     });
 
