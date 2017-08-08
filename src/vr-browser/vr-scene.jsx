@@ -21,7 +21,7 @@ export default class VRScene extends React.Component {
       <Scene>
         <div style={{position: "absolute", right: "0px", top: "0px", zIndex: 10, color: "white", padding: "3px"}}>GIT: {__GIT_REVISION__}</div>
         <Camera>
-          <Cursor raycaster="objects: .tab-screen; showLine: true"></Cursor>
+          <Cursor raycaster={{objects: ".tab-screen", showLine: true}}></Cursor>
         </Camera>
 
         <Entity>
